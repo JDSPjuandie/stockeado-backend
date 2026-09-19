@@ -1,0 +1,25 @@
+# Blueprint de Render — alternativa a Railway. Si preferís Render,
+# subí este archivo a la raíz del repo y usá "New > Blueprint" en el
+# dashboard de Render: arma la base de datos y el servicio solo.
+services:
+  - type: web
+    name: stockeado-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: stockeado-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: NODE_ENV
+        value: production
+      - key: ALLOWED_ORIGINS
+        sync: false # lo completás vos manualmente con la URL del frontend
+
+databases:
+  - name: stockeado-db
+    plan: starter
