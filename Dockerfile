@@ -1,5 +1,10 @@
-# Imagen liviana de Node — suficiente para una API Express + Prisma.
-FROM node:20-alpine
+# node:20-slim (Debian) en vez de Alpine — Prisma necesita OpenSSL y
+# Alpine (musl) da problemas conocidos de compatibilidad con el motor
+# de Prisma. slim + openssl instalado es la combinación estable.
+FROM node:20-slim
+
+# Prisma necesita openssl para conectarse a la base de datos.
+RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
